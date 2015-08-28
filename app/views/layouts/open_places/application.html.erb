@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+  	<title>OpenPlaces</title>
+  
+  	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+		<link href='https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
+  	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  	<%= csrf_meta_tags %>
+		<style>
+
+		body,p,h1,h2,h3,h4{
+			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+			line-height: 140%;
+			color: #777;
+		}
+		#location{
+			font-size: 100%;
+			height: auto;
+			color: #555;
+		}
+		table#detail tr{
+			display: none;
+		}
+		tb{
+			padding-left: 25px;
+		}
+		#map { 
+			height: 500px; 
+			width: 100%;
+		}
+		footer, footer a{
+			color: #555;
+		}
+		footer a{
+			font-weight: bold;
+		}
+		</style>
+		
+  </head>
+  <body>
+		<%= yield %>
+	  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<script src='https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
+  	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+		<script type="text/javascript">
+			<%= yield :javascript %>
+		</script>
+  </body>
+</html>

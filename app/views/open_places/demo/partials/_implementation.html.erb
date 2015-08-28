@@ -1,0 +1,27 @@
+<h4>Implementation</h4>
+<p>Use JQuery UI autocomplete to create a GooglePlaces-like autocomplete experience.</p>
+<pre>$( "#location" ).autocomplete({
+<tb/>source: function( request, response ) {
+<tb/><tb/>$.ajax({
+<tb/><tb/><tb/>url: "/api",
+<tb/><tb/><tb/>dataType: "jsonp",
+<tb/><tb/><tb/>data: {
+<tb/><tb/><tb/><tb/>like: request.term,
+<tb/><tb/><tb/><tb/>limit: 5
+<tb/><tb/><tb/>},
+<tb/><tb/><tb/>success: function( data ) {
+<tb/><tb/><tb/><tb/>renderResults(data);
+<tb/><tb/><tb/>}
+<tb/><tb/>});
+<tb/>},
+<tb/>minLength: 3,
+<tb/>select: function( event, ui ) {
+<tb/><tb/>console.log(ui.item);
+<tb/><tb/>return false;
+<tb/>}
+}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+<tb/>return $( "<li>" )
+<tb/><tb/>.append( "<a>" + item.name + " " + item.country_name + "</a>" )
+<tb/><tb/>.appendTo( ul );
+<tb/>};
+});</pre>

@@ -1,0 +1,82 @@
+<div id="map"></div>
+<div class="container">
+	<div class="engine">
+		<form>
+			<h1><input type="location" class="form-control" id="location" placeholder="Enter a City, State, Province, Country"></h1>
+		</form>
+  </div>	
+  <div class="row marketing hidden">
+		<div class="col-lg-12">
+			<h1><a href="http://github.com/tyrauber/OpenPlaces">OpenPlaces</a></h1>
+			<h4>OpenPlaces is a Location Autocomplete Rails 4 Engine. It imports Natural Earth geospatial data and provides a mountable JSON/GeoJSON API endpoint.</h4>
+			<hr/>
+		</div>
+
+    <div class="col-lg-12">
+			<h4>Requirements</h4>
+			<p>OpenPlaces uses Postgres and the PostGIS adapter to do fast geo-spatial and full text search. A Rails 4 application with a Postgres database with the PostGIS extension is required to use OpenPlaces.</p>
+			<%= render partial: "open_places/demo/partials/setup"%>
+			<%= render partial: "open_places/demo/partials/implementation"%>
+			<%= render partial: "open_places/demo/partials/data"%>
+    </div>
+  </div>
+  <footer class="footer" style="margin-bottom: 40px;">
+		<hr style="margin: 5px 0px;"/>
+		<p><b><a href="http://github.com/tyrauber/OpenPlaces">OpenPlaces</a> is a Rails Engine providing fast, global location autocomplete.</b><br/><small>Created by <a href="http://github.com/tyrauber">Ty Rauber</a>, OpenPlaces is published under the MIT Licencse. Special thanks to <a href="http://naturalearthdata.com">NaturalEarthData.com</a> and <a href="http://geonames.org">Geonames.org</a>for the data.</small></p>
+		<hr style="margin: 5px 0px;"/>
+  </footer>
+</div>
+
+<% content_for(:javascript) do %>
+$(document).ready(function(){
+
+		L.mapbox.accessToken = '<%= ENV['MAPBOX_ID']%>';
+		window["map"] = L.mapbox.map('map', 'mapbox.streets')
+		    .setView([0,0], 2);
+
+    $( "#location" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "/api/autocomplete.geojson",
+          data: {
+						like: request.term,
+						limit: 10
+          },
+          complete: function( data ) {
+						response(data.responseJSON.features);
+						window["map"].featureLayer.setGeoJSON(data.responseJSON);
+						window["map"].fitBounds(window["map"].featureLayer.getBounds());
+						window["map"].featureLayer.eachLayer(function(layer) {
+						    var content = "";
+								$.each(layer.feature.properties, function(k,v){
+									content += "<b style='width:120px; display:inline-block;'>"+k+"</b>"+v+"<br/>"
+								})
+						    layer.bindPopup(content);
+						});
+          }
+        });
+      },
+      minLength: 3,
+      select: function( event, ui ) {
+				$(".marketing").removeClass('hidden');
+				window["map"].featureLayer.setGeoJSON(ui.item);
+				window["map"].fitBounds(window["map"].featureLayer.getBounds());
+				window["map"].featureLayer.eachLayer(function(layer) {
+				    var content = "";
+						$.each(layer.feature.properties, function(k,v){
+							content += "<b style='width:120px; display:inline-block;'>"+k+"</b>"+v+"<br/>"
+						})
+				    layer.bindPopup(content);
+				});
+				window["map"].setZoom(7);
+        return false;
+      }
+    }).autocomplete( "instance" )._renderItem = function( ul, item ) {
+			$(".marketing").removeClass('hidden');
+      return $( "<li>" )
+        .append( "<a>" + item.properties.long_name + "</a>" )
+        .appendTo( ul );
+    };
+})
+</script>
+<% end %>

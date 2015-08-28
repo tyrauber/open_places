@@ -1,0 +1,19 @@
+
+default: &default
+  adapter: postgis
+  host: localhost
+  encoding: utf8
+  username: postgres
+  password: postgres
+
+development:
+  <<: *default
+  database: open_places_development
+
+test:
+  <<: *default
+  database: open_places_test
+
+production:
+  <<: *default
+  database: open_places_production

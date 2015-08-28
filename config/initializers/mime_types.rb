@@ -1,0 +1,1 @@
+Mime::Type.register "application/json", :geojson, %w( text/x-json application/jsonrequest )

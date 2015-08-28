@@ -1,0 +1,9 @@
+<h4>Setup</h4>
+<label>1. Add <code>gem "open_places"</code> to your Gemfile</label><br/>
+<label>2. Run <code>bundle install</code> from your bash terminal</label><br/>
+<label>3. Run <code>rake open_places:install:migrations</code> to generate the migration</label><br/>
+<label>4. Run <code>rake db:migrate</code> to migrate the database</label><br/>	
+<label>5. Add <code>mount OpenPlaces::Engine => "/api"</code> to config/routes.rb</label><br/><br/>
+
+<label>Visit: <a href="/api?like=seattle">"/api?like=seattle"</a></label><br/>
+<hr/>
