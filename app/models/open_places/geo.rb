@@ -39,7 +39,7 @@ module OpenPlaces
 
     scope :near, -> (here=false, within='5', query=self.all){
       return query unless here
-      select("*,round(cast((ST_Distance_Sphere(latlng, ST_SetSRID(ST_MakePoint(#{here.toLngLat}), 4326))*0.000621371) AS NUMERIC),2) AS distance").where("ST_DWithin(latlng, ST_SetSRID(ST_MakePoint(#{here.toLngLat}), 4326), #{within})").order("distance ASC")
+      select("*,round(cast((ST_Distance_Sphere(latlng, ST_SetSRID(ST_MakePoint(#{here.toLngLat}), 4326))*0.000621371) AS NUMERIC),2) AS distance").order("latlng <-> st_setsrid(st_makepoint(#{here.toLngLat}),4326) ASC")
     }
 
     scope :ordered, -> (query=self.all){
