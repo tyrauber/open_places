@@ -37,13 +37,14 @@ module OpenPlaces
       end
     }
 
-    scope :near, -> (here=false, within='5', query=self.all){
+    scope :near, -> (here=false, query=self.all){
       return query unless here
       select("*,round(cast((ST_Distance_Sphere(latlng, ST_SetSRID(ST_MakePoint(#{here.toLngLat}), 4326))*0.000621371) AS NUMERIC),2) AS distance").order("latlng <-> st_setsrid(st_makepoint(#{here.toLngLat}),4326) ASC")
     }
 
-    scope :ordered, -> (query=self.all){
-      order('scalerank ASC')
+    scope :within, -> (here=false, within='5', query=self.all){
+      return query unless here
+      where("ST_DWithin(latlng, ST_SetSRID(ST_MakePoint(#{here.toLngLat}), 4326), #{within})")
     }
 
     scope :to_geojson, -> (field="geom", query=self.all) {
