@@ -1,6 +1,7 @@
 class CreateOpenPlaces < ActiveRecord::Migration
   def up
     ActiveRecord::Base.connection.execute("CREATE EXTENSION IF NOT EXISTS postgis;")
+    ActiveRecord::Base.connection.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm;")
     create_table(:open_places) do |t|
       t.string :geotype
       t.string :subtype

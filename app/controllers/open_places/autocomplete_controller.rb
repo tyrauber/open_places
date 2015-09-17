@@ -9,9 +9,9 @@ module OpenPlaces
       op = (params.keys & ['q', 'like', 'contains', 'starts', 'ends']).flatten.shift
       @results = OpenPlaces::Geo
       @results = @results.where(geotype: params[:type].split(",").map{|t| "OpenPlaces::#{t}" }) if params[:type].present?
-      @results = @results.order('scalerank ASC')
       @results = @results.autocomplete(query_string, op) if query_string.present?
       @results = @results.near(params[:near]) if params[:near].present?
+      @results = @results.order('scalerank ASC')
       @results = @results.limit(params[:limit])
       
       respond_to do |format|

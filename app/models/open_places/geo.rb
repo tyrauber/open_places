@@ -27,7 +27,7 @@ module OpenPlaces
         return where("#{table_name}.#{field} = '#{string}'")
       elsif op == 'like'
         string = string.gsub(/\'/, "''").gsub(/\,/, "")
-        return where("#{table_name}.tsvector @@ to_tsquery(replace(quote_literal('#{string}'), '\s', '&')||':*')").order("to_tsquery(replace(quote_literal('#{string}'), '\s', '&')||':*') DESC")
+        return where("#{table_name}.tsvector @@ to_tsquery(replace(quote_literal('#{string}'), '\s', '&')||':*') ").order("similarity(#{table_name}.name, '#{string}') DESC, ts_rank(tsvector, to_tsquery(replace(quote_literal('#{string}'), ' ', '&')||':*')) DESC")
       elsif op == 'starts'
         return where("#{table_name}.#{field} LIKE '#{string}%'")
       elsif op == 'ends'
