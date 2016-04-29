@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails", "~> 3.0"
   s.add_dependency "pg", "~> 0.18"
   s.add_dependency "activerecord-postgis-adapter"
+  s.add_dependency "geocoder"
 end

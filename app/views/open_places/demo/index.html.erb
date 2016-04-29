@@ -29,10 +29,11 @@
 
 <% content_for(:javascript) do %>
 $(document).ready(function(){
-
-		L.mapbox.accessToken = '<%= ENV['MAPBOX_ID']%>';
-		window["map"] = L.mapbox.map('map', 'mapbox.streets')
+    <% if ENV['MAPBOX_ID'].present? %>
+	    L.mapbox.accessToken = '<%= ENV['MAPBOX_ID']%>';
+		  window["map"] = L.mapbox.map('map', 'mapbox.streets')
 		    .setView([0,0], 2);
+    <% end %>
 
     $( "#location" ).autocomplete({
       source: function( request, response ) {

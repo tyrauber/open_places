@@ -13,7 +13,18 @@ module OpenPlaces
       @results = @results.near(params[:near]) if params[:near].present?
       @results = @results.order('scalerank ASC')
       @results = @results.limit(params[:limit])
-      
+
+      if @results.empty?
+        OpenPlaces::Geo.transaction do
+          @result = OpenPlaces::Geo.create(long_name: query_string)
+          if @result.id.present?
+            @results = OpenPlaces::Geo.where(id: @result.id)
+          else
+            @results = OpenPlaces::Geo.where(slug: @result.slug)
+          end
+        end
+      end
+
       respond_to do |format|
         format.json do
           render json: @results.to_json(except: OpenPlaces::Geo.GEO_FIELDS), root: false, status: 200, :callback => params['callback']
